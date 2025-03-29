@@ -1,6 +1,6 @@
 "use server"
 import { prisma } from '@/lib/db';
-import { spabase } from '@/lib/utils';
+import { supabase } from '@/lib/utils';
 import {v4 as uuidv4} from "uuid"
 import { z } from 'zod';
 const item_schema = z.object({
@@ -24,11 +24,16 @@ export const register_item = async(item_data:{
         item_schema.parse(item_data)
         if (item_data.img && item_data.date){
             const image_name = `${uuidv4()}`
-            const {data,error} = await spabase.storage.from("image").upload(image_name,item_data.img, {
+            await supabase.auth.signUp({
+                email: "fumiharuabe@gmail.com",
+                password: "20080916"
+              })
+            const {data,error} = await supabase.storage.from("drop-imgs").upload(image_name,item_data.img, {
                 cacheControl: '3600',
                 upsert: false
               })
             console.log(error)
+            console.log(data)
             await prisma.drop.create({
                 data:{
                     title:item_data.name,
