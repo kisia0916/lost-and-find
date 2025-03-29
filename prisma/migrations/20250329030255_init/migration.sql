@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Drop" ALTER COLUMN "createdAT" SET DATA TYPE TEXT;

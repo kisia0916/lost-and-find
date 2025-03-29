@@ -1,0 +1,71 @@
+.container {
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.searchInputWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+  height: 1rem;
+  width: 1rem;
+}
+
+.searchInput {
+  padding-left: 2.5rem;
+}
+
+.filterButton {
+  flex-shrink: 0;
+}
+
+.filtersAccordion {
+  margin-top: 1rem;
+}
+
+.filtersItem {
+  border: none;
+}
+
+.filtersContent {
+  padding: 1rem 0;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterActions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}
+

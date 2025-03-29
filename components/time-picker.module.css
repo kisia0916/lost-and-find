@@ -1,0 +1,26 @@
+.timePickerContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.timePickerIcon {
+  margin-right: 0.5rem;
+}
+
+.timeInputs {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.timeInput {
+  width: 3rem;
+  text-align: center;
+}
+
+.timeSeparator {
+  margin: 0 0.25rem;
+  font-weight: bold;
+}
+
