@@ -45,7 +45,7 @@ interface ItemCardProps {
   viewMode: "grid" | "list",
 }
 
-export default function ItemCard({ item, viewMode,set_item_list }: ItemCardProps) {
+export default function ItemCard({ item, viewMode }: ItemCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showDetailsDialog, setShowDetailsDialog] = useState(false)
   const handleDelete = () => {
