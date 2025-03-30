@@ -30,6 +30,74 @@
   gap: 1rem;
 }
 
+.noItems {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--muted-foreground);
+  font-size: 1.125rem;
+}
+
+/* スケルトンローディングのスタイル */
+.skeletonGrid {
+  display: flex;
+  flex-direction: column;
+  height: 350px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+}
+
+.skeletonList {
+  display: flex;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  height: 150px;
+}
+
+.skeletonImageGrid {
+  width: 100%;
+  height: 200px;
+}
+
+.skeletonImageList {
+  width: 100px;
+  height: 100px;
+  margin: 1rem 0 1rem 1rem;
+}
+
+.skeletonContent {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonTitle {
+  height: 1.5rem;
+  width: 70%;
+}
+
+.skeletonDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeletonDetail {
+  height: 1rem;
+  width: 60%;
+}
+
+.skeletonDescription {
+  height: 2.5rem;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;

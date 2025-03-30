@@ -14,6 +14,7 @@ const item_schema = z.object({
 export const register_item = async(item_data:{
     name:string,
     place:string,
+    floor:string,
     date:Date|undefined|null,
     img:File|undefined|null,
     time:string,
@@ -24,22 +25,23 @@ export const register_item = async(item_data:{
         item_schema.parse(item_data)
         if (item_data.img && item_data.date){
             const image_name = `${uuidv4()}`
-            await supabase.auth.signUp({
-                email: "fumiharuabe@gmail.com",
-                password: "20080916"
-              })
+
             const {data,error} = await supabase.storage.from("drop-imgs").upload(image_name,item_data.img, {
                 cacheControl: '3600',
                 upsert: false
               })
-            console.log(error)
-            console.log(data)
+            if (error){
+                return false
+            }
             await prisma.drop.create({
                 data:{
                     title:item_data.name,
                     place:item_data.place,
-                    pictureURL:`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${image_name}`,
-                    createdAt:item_data.date
+                    floor:item_data.floor,
+                    pictureURL:`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/drop-imgs/${image_name}`,
+                    date:item_data.date,
+                    info:item_data.info,
+                    time:item_data.time
                 }
             })
             return true
@@ -49,5 +51,4 @@ export const register_item = async(item_data:{
     }catch{
         return false
     }
-
 }

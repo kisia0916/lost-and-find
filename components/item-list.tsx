@@ -1,55 +1,59 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ItemCard from "@/components/item-card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Grid, List } from "lucide-react"
 import styles from "./item-list.module.css"
-import { motion } from "framer-motion"
+import { motion,AnimatePresence } from "framer-motion"
+import { Skeleton2 } from "@/components/ui/skelton2"
+import { Drop } from "@prisma/client"
+import { get_items } from "@/actions/get_items"
 
-// サンプルデータ
-const ITEMS = [
-  {
-    id: "1",
-    name: "黒い財布",
-    location: "中央図書館2階",
-    date: "2023-04-15",
-    time: "14:30",
-    image: "/placeholder.svg?height=200&width=200",
-    description: "レザー製の黒い財布。中身は空でした。",
-  },
-  {
-    id: "2",
-    name: "青いスマートフォン",
-    location: "食堂",
-    date: "2023-04-14",
-    time: "12:15",
-    image: "/placeholder.svg?height=200&width=200",
-    description: "青いケースのiPhone。画面にヒビが入っています。",
-  },
-  {
-    id: "3",
-    name: "学生証",
-    location: "体育館",
-    date: "2023-04-13",
-    time: "16:45",
-    image: "/placeholder.svg?height=200&width=200",
-    description: "山田太郎さんの学生証。",
-  },
-  {
-    id: "4",
-    name: "赤い傘",
-    location: "正門",
-    date: "2023-04-12",
-    time: "09:00",
-    image: "/placeholder.svg?height=200&width=200",
-    description: "折りたたみ式の赤い傘。",
-  },
-]
+
 
 export default function ItemList() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [isLoading, setIsLoading] = useState(true)
+  const [items, setItems] = useState<Drop[]>([])
+  useEffect(() => {
+    const fetchItems = async () => {
+      setIsLoading(true)
+      try {
+        const items = await get_items()
+        if (items){
+          setItems(items)
+        }else{
+          console.error("データの取得に失敗しました")
+        }
+      } catch (error) {
+        console.error("データの取得に失敗しました:", error)
+        // エラー処理
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
+    fetchItems()
+  }, [])
+  const renderSkeletons = () => {
+    return Array(4)
+      .fill(0)
+      .map((_, index) => (
+        <div key={`skeleton-${index}`} className={viewMode === "grid" ? styles.skeletonGrid : styles.skeletonList}>
+          <Skeleton2 className={viewMode === "grid" ? styles.skeletonImageGrid : styles.skeletonImageList} />
+          <div className={styles.skeletonContent}>
+            <Skeleton2 className={styles.skeletonTitle} />
+            <div className={styles.skeletonDetails}>
+              <Skeleton2 className={styles.skeletonDetail} />
+              <Skeleton2 className={styles.skeletonDetail} />
+              <Skeleton2 className={styles.skeletonDetail} />
+            </div>
+            {viewMode === "list" && <Skeleton2 className={styles.skeletonDescription} />}
+          </div>
+        </div>
+      ))
+  }
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -67,17 +71,28 @@ export default function ItemList() {
       </div>
 
       <motion.div className={viewMode === "grid" ? styles.grid : styles.list} layout transition={{ duration: 0.3 }}>
-        {ITEMS.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-          >
-            <ItemCard item={item} viewMode={viewMode} />
-          </motion.div>
-        ))}
+        <AnimatePresence>
+          {isLoading ? (
+            renderSkeletons()
+          ) : items.length > 0 ? (
+            items.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <ItemCard item={item} viewMode={viewMode} />
+              </motion.div>
+            ))
+          ) : (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.noItems}>
+              登録された落とし物はありません
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
+
     </div>
   )
 }

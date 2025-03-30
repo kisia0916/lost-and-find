@@ -101,3 +101,93 @@
   width: 100%;
 }
 
+/* 詳細ダイアログのスタイル */
+.detailsDialog {
+  max-width: 90vw;
+  width: 700px;
+}
+
+.dialogHeaderContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.dialogTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.itemId {
+  font-size: 0.75rem;
+}
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.dialogImageContainer {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+}
+
+.dialogImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dialogDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.dialogDetailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dialogDetailItem:last-child {
+  grid-column: span 2;
+}
+
+.dialogDetailTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.dialogFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .dialogDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .dialogDetailItem:last-child {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .detailsDialog {
+    width: 100%;
+    max-width: 100%;
+  }
+}

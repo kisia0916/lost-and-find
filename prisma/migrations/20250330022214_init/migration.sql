@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Drop" ALTER COLUMN "floor" SET DATA TYPE TEXT;

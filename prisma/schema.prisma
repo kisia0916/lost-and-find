@@ -17,6 +17,9 @@ model Drop {
   id        String @id @default(uuid()) @db.Uuid
   title     String
   place     String
+  floor     String
+  info      String
   pictureURL String
-  createdAt DateTime
+  date DateTime
+  time String
 }

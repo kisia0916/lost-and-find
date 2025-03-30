@@ -13,13 +13,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { TimePickerDemo } from "@/components/time-picker"
 import { format } from "date-fns"
 import { fi, ja } from "date-fns/locale"
-import { CalendarIcon, ImagePlus } from "lucide-react"
+import {AlertCircle, CalendarIcon, ImagePlus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import styles from "./item-form.module.css"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence} from "framer-motion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { register_item } from "@/actions/register_item"
-
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function ItemForm() {
   const router = useRouter()
@@ -32,10 +32,8 @@ export default function ItemForm() {
   const [register_time,set_register_time] = useState<string>("")
   const [floor, setFloor] = useState<string>("")
   const [building, setBuilding] = useState<string>("")
+  const [error, setError] = useState<string | null>(null)
 
-  useEffect(()=>{
-    set_item_place(`${building}${floor}`)
-  },[floor,building])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -51,25 +49,38 @@ export default function ItemForm() {
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     const register_status = await register_item({
       name:item_name,
-      place:item_place,
+      place:building,
+      floor:floor,
       date:date,
       img:image_data,
       time:register_time,
       info:item_info
     })
+
     // ここで実際のデータ送信処理を行う
     // 送信後にホームページに戻る
     if (register_status){
       router.push("/")
     }else{
-      alert("register error")
+      setError("登録に失敗しました。もう一度お試しください。")
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      <AnimatePresence>
+        {error && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, height: 0 }}>
+            <Alert variant="destructive" className={styles.errorAlert}>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className={styles.imageUpload}>
         <Label htmlFor="image" className={styles.imageLabel}>
           {imagePreview ? (
@@ -125,9 +136,9 @@ export default function ItemForm() {
                 <SelectValue placeholder="号館を選択" />
               </SelectTrigger>
               <SelectContent>
-                {[1, 2, 3, 4, 5].map((num) => (
+                {["1号館", "2号館", "3号館", "4号館", "5号館"].map((num) => (
                   <SelectItem key={`building-${num}`} value={num.toString()}>
-                    {num}号館
+                    {num}
                   </SelectItem>
                 ))}
               </SelectContent>
